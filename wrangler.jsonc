@@ -8,6 +8,7 @@
 	"name": "datadog-example-tail-consumer",
 	"main": "src/index.ts",
 	"compatibility_date": "2025-05-10",
+	"compatibility_flags": ["nodejs_compat"],
 	"observability": {
 		"enabled": true
 	}
