@@ -1,14 +1,18 @@
 import { client, v2 } from '@datadog/datadog-api-client';
 
+let datadog: v2.LogsApi;
+
 export default {
 	async tail(events: TraceItem[], env: Env) {
-		const configuration = client.createConfiguration({
-			authMethods: {
-				apiKeyAuth: env.DATADOG_API_KEY,
-				appKeyAuth: env.DATADOG_APP_KEY,
-			},
-		});
-		const apiInstance = new v2.LogsApi(configuration);
+		if (!datadog) {
+			const configuration = client.createConfiguration({
+				authMethods: {
+					apiKeyAuth: env.DATADOG_API_KEY,
+					appKeyAuth: env.DATADOG_APP_KEY,
+				},
+			});
+			datadog = new v2.LogsApi(configuration);
+		}
 
 		const params: v2.LogsApiSubmitLogRequest = {
 			body: [
@@ -23,7 +27,7 @@ export default {
 			contentEncoding: 'gzip',
 		};
 
-		await apiInstance
+		await datadog
 			.submitLog(params)
 			.then((data: any) => {
 				console.log('API called successfully. Returned data: ' + JSON.stringify(data));
